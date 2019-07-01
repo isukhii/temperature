@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Current Weather</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  </head>
+
+  <body>
+    <div id="showWeatherForcast" class="row">
+   
+    </div>
+
+    <script>
+      var key = "f7df5b77d281dcfa5ef2ac117396e705";
+      var city = "Mumbai"; // My test case is "Mumbai"
+      var url = "https://api.openweathermap.org/data/2.5/forecast";
+      $.ajax({
+        url: url, //API Call
+        dataType: "json",
+        type: "GET",
+        data: {
+          q: city,
+          appid: key,
+          units: "metric",
+          cnt: "7"
+      },
+      success: function(data) 
+      {
+        console.log('Received data:', data) // For testing
+        var wf = "";
+        var d = new Date();
+        var weekday = new Array(7);
+        weekday[0] = "Sunday";
+        weekday[1] = "Monday";
+        weekday[2] = "Tuesday";
+        weekday[3] = "Wednesday";
+        weekday[4] = "Thursday";
+        weekday[5] = "Friday";
+        weekday[6] = "Saturday";
+        var date = new Date();
+        $.each(data.list, function(index, val) 
+        {
+          var last = new Date(date.getTime() + (index * 24 * 60 * 60 * 1000)); //lastdate
+          var n = weekday[last.getDay()]; //convert to day
+
+          wf += "<div class='col-lg-1 col-md-1 col-sm-4 col-xs-12'>" // Opening div tag
+          wf += "<b>" + n + "</b><br>" // Day
+          wf += val.main.temp + "&degC " // Temperature
+        
+          wf += "</div>" // Closing div tag
+        });
+        $("#showWeatherForcast").html(wf);
+      } });
+    </script>
+  </body>
+</html>
